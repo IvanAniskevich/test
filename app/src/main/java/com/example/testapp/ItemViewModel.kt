@@ -35,6 +35,10 @@ val i3 = Item("cccc", 3, "dsj", 33.33, 2, "sodh", true)
         }
     }
 
+    init {
+        getItems()
+    }
+
     fun visabilityOn(item: Item) {
         _listOfItem.value!!.single {it == item}.Visibility = true
     }

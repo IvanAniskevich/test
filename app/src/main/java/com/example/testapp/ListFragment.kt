@@ -23,7 +23,6 @@ private  val viewModel : ItemViewModel by activityViewModels()
         savedInstanceState: Bundle?
     ): View {
         _binding = ListFragmentBinding.inflate(inflater, container,false)
-viewModel.getItems()
         return binding.root
     }
 

@@ -29,23 +29,25 @@ class Repository {
 //        return getIList(today, tomorrow)
 //    }
 
-//            val l = RetrofitInstsnse.API_SERVICES.getItemsToday()
-//
-//            fun mapToRedy(itemToday: Item): RedyItem {
-//                return RedyItem(
-//                    Abbreviation = itemToday.Cur_Abbreviation,
-//                    Name = itemToday.Cur_Name,
-//                    OfficialRateToday = itemToday.Cur_OfficialRate,
-//                    OfficialRateTomorrow = itemToday.Cur_OfficialRate,
-//                    Scale = itemToday.Cur_Scale
-//                )
-//            }
-//
-//           fun getItems(): ArrayList<RedyItem> {
-//
-//               return l.map { mapToRedy(it) } as ArrayList<RedyItem>
-//           }
 
-    fun getItems(): ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsToday()
+
+            fun mapToRedy(itemToday: ItemsJson): Item {
+                return Item(
+                    Cur_Abbreviation = itemToday.Cur_Abbreviation,
+                    Cur_Name = itemToday.Cur_Name,
+                    Cur_OfficialRate = itemToday.Cur_OfficialRate,
+                    Cur_Scale = itemToday.Cur_Scale,
+                    Visibility = true,
+                    Date = itemToday.Date,
+                    Cur_ID = itemToday.Cur_ID
+                )
+            }
+
+          suspend fun getItems(): ArrayList<Item> {
+               val l = RetrofitInstsnse.API_SERVICES.getItemsToday()
+               return l.map { mapToRedy(it) } as ArrayList<Item>
+           }
+
+//    fun getItems(): ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsToday()
 
 }
