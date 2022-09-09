@@ -36,8 +36,8 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
         with(holder.binding) {
             abbreviation.text = item.Cur_Abbreviation
             name.text = item.Cur_Name
-            officialRateToday.text = item.Cur_OfficialRate.toString()
-            textView3.text = item.Cur_OfficialRate.toString()
+            officialRateToday.text = item.Cur_OfficialRateToday.toString()
+            textView3.text = item.Cur_OfficialRateTomorrow.toString()
         }
 
 

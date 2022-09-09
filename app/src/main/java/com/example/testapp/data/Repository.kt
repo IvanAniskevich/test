@@ -2,6 +2,7 @@ package com.example.testapp.data
 
 
 
+
 class Repository {
 //    val today: ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsToday()
 //    val tomorrow: ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsTomorrow()
@@ -29,13 +30,15 @@ class Repository {
 //        return getIList(today, tomorrow)
 //    }
 
+//попробовать через .zip
 
 
-            fun mapToRedy(itemToday: ItemsJson): Item {
+            fun mapToRedy(itemToday: ItemJson, itemTomorrow: ItemJson): Item {
                 return Item(
                     Cur_Abbreviation = itemToday.Cur_Abbreviation,
                     Cur_Name = itemToday.Cur_Name,
-                    Cur_OfficialRate = itemToday.Cur_OfficialRate,
+                    Cur_OfficialRateToday = itemToday.Cur_OfficialRate,
+                    Cur_OfficialRateTomorrow = itemTomorrow.Cur_OfficialRate,
                     Cur_Scale = itemToday.Cur_Scale,
                     Visibility = true,
                     Date = itemToday.Date,
@@ -45,7 +48,9 @@ class Repository {
 
           suspend fun getItems(): ArrayList<Item> {
                val l = RetrofitInstsnse.API_SERVICES.getItemsToday()
-               return l.map { mapToRedy(it) } as ArrayList<Item>
+               val t = RetrofitInstsnse.API_SERVICES.getItemsTomorrow()
+              val r = l.zip(t)
+               return r.map { mapToRedy(it.first, it.second) } as ArrayList<Item>
            }
 
 //    fun getItems(): ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsToday()

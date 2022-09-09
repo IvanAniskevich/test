@@ -28,6 +28,7 @@
         android:checked="true"
         android:minWidth="48dp"
         android:minHeight="48dp"
+        android:paddingEnd="30dp"
         app:layout_constraintEnd_toStartOf="@+id/icon"
         app:layout_constraintTop_toTopOf="parent" />
 
