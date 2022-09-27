@@ -2,8 +2,16 @@ package com.example.testapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 
 class MainActivity : AppCompatActivity() {
@@ -17,9 +25,23 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        setupActionBarWithNavController(navController)
+        setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph ))
     }
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.settings -> navController.navigate(R.id.action_listFragment_to_setingFragment)
+            R.id.done -> navController.navigate(R.id.action_setingFragment_to_listFragment)
+
+}
+        return super.onOptionsItemSelected(item)
     }
 }

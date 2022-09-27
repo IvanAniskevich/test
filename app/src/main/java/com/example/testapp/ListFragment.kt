@@ -1,21 +1,32 @@
 package com.example.testapp
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.databinding.ListFragmentBinding
 
 
 class ListFragment:Fragment() {
-private  val viewModel : ItemViewModel by activityViewModels()
+private  val viewModel : ItemViewModel by viewModels {
+    ItemViewModelFactory((activity?.application as BaseApplication).repository)
+}
     private var _binding : ListFragmentBinding? = null
     private val binding get() = _binding!!
     val adapter = ListAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        activity?.invalidateOptionsMenu()
+    }
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.done).isVisible = false
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,6 +34,7 @@ private  val viewModel : ItemViewModel by activityViewModels()
         savedInstanceState: Bundle?
     ): View {
         _binding = ListFragmentBinding.inflate(inflater, container,false)
+
         return binding.root
     }
 
@@ -36,11 +48,6 @@ private  val viewModel : ItemViewModel by activityViewModels()
 
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
-        binding.button.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_setingFragment)
-
-
-        }
     }
 
 

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -38,6 +39,7 @@ android {
 dependencies {
 
     def lifecycle_version = "2.4.0"
+    def room_version = "2.3.0"
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
@@ -53,6 +55,11 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.5.0"
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    // Room
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
 
 
 

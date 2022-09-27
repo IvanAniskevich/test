@@ -1,35 +1,28 @@
 package com.example.testapp
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.testapp.data.Item
 import com.example.testapp.data.Repository
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ItemViewModel: ViewModel() {
+class ItemViewModel(private val repository: Repository): ViewModel() {
 val i1 = Item("aaaa", 1, "dsj", 11.11, 11.22, 1, "sodh", true)
 val i2 = Item("bbbb", 2, "dsj", 22.11, 22.22, 1,"sodh", true)
 val i3 = Item("cccc", 3, "dsj", 33.11, 33.22, 1,"sodh", true)
-
-
-//    val i = RedyItem("cx", "kjxvh", 12.1, 10.0, 1)
     val l  = arrayListOf (i1, i2, i3)
 
-    private val repository = Repository()
+
     private var _listOfItem = MutableLiveData<ArrayList<Item>>()
     val listOfItem: LiveData<ArrayList<Item>>  = _listOfItem
-
     fun getItems() {
         viewModelScope.launch {
           try {
-              _listOfItem.value = repository.getItems()
+              _listOfItem.value = repository.getRedyItems()
           }
           catch (e: Exception){
-              _listOfItem.value = l
+              _listOfItem.value = repository.getItemsApi()
           }
         }
     }
@@ -48,5 +41,18 @@ val i3 = Item("cccc", 3, "dsj", 33.11, 33.22, 1,"sodh", true)
 
     fun muveItem(initial: Int, target: Int){
         Collections.swap(_listOfItem.value!!, initial, target)
+    }
+
+    fun update(list: ArrayList<Item>){
+        viewModelScope.launch { repository.update(list) }
+    }
+}
+class ItemViewModelFactory(private val repository: Repository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ItemViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ItemViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

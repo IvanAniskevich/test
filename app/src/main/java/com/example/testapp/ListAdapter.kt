@@ -11,8 +11,6 @@ import com.example.testapp.databinding.ListItemBinding
 
 class ListAdapter: RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
 
-
-
     var listItems = ArrayList<Item>()
 
     class ListViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -28,25 +26,18 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val item: Item = listItems[position]
 
-        if (item.Visibility == true) {
-            holder.itemView.visibility = View.VISIBLE
-        }
-        else holder.itemView.visibility = View.GONE
-
         with(holder.binding) {
             abbreviation.text = item.Cur_Abbreviation
             name.text = item.Cur_Name
             officialRateToday.text = item.Cur_OfficialRateToday.toString()
             textView3.text = item.Cur_OfficialRateTomorrow.toString()
         }
-
-
     }
 
     override fun getItemCount(): Int = listItems.size
 
     fun setList(list: ArrayList<Item>){
-        listItems= list
+        listItems= list.filter { it.Visibility } as ArrayList<Item>
         notifyDataSetChanged()
     }
 }

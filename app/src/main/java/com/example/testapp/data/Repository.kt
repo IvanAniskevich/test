@@ -1,39 +1,16 @@
 package com.example.testapp.data
 
+import androidx.lifecycle.asLiveData
 
 
+class Repository(private val itemDao: ItemDao) {
 
-class Repository {
-//    val today: ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsToday()
-//    val tomorrow: ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsTomorrow()
-//    var redy = ArrayList<RedyItem>(today.size)
-//    var i: Int = 0
-//
-//
-//    fun mapToRedy(itemToday: Item, itemTomorrow: Item): RedyItem {
-//        if (i < redy.size - 1) i++
-//        else i = 0
-//        return RedyItem(
-//            Abbreviation = itemToday.Cur_Abbreviation,
-//            Name = itemToday.Cur_Name,
-//            OfficialRateToday = itemToday.Cur_OfficialRate,
-//            OfficialRateTomorrow = itemTomorrow.Cur_OfficialRate,
-//            Scale = itemToday.Cur_Scale
-//        )
-//    }
-//
-//    fun getIList(today: ArrayList<Item>, tomorrow: ArrayList<Item>): ArrayList<RedyItem> {
-//        return redy.map { mapToRedy(today[i], tomorrow[i]) } as ArrayList<RedyItem>
-//    }
-//
-//    fun getItems(): ArrayList<RedyItem> {
-//        return getIList(today, tomorrow)
-//    }
+    suspend fun update(list: ArrayList<Item>){
+        for (item in list)
+        itemDao.update(item)
+    }
 
-//попробовать через .zip
-
-
-            fun mapToRedy(itemToday: ItemJson, itemTomorrow: ItemJson): Item {
+            fun mapToRedyApi(itemToday: ItemJson, itemTomorrow: ItemJson): Item {
                 return Item(
                     Cur_Abbreviation = itemToday.Cur_Abbreviation,
                     Cur_Name = itemToday.Cur_Name,
@@ -46,13 +23,30 @@ class Repository {
                 )
             }
 
-          suspend fun getItems(): ArrayList<Item> {
+    private fun mapToRedy(itemDao: Item, itemApi: Item): Item {
+        return Item(
+            Cur_Abbreviation = itemApi.Cur_Abbreviation,
+            Cur_Name = itemApi.Cur_Name,
+            Cur_OfficialRateToday = itemApi.Cur_OfficialRateToday,
+            Cur_OfficialRateTomorrow = itemApi.Cur_OfficialRateTomorrow,
+            Cur_Scale = itemApi.Cur_Scale,
+            Visibility = itemDao.Visibility,
+            Date = itemApi.Date,
+            Cur_ID = itemApi.Cur_ID
+        )
+    }
+    suspend fun getRedyItems():ArrayList<Item>{
+            val d = itemDao.getItems().asLiveData().value
+            val l = getItemsApi()
+            val r = d?.zip(l)
+            return r?.map { mapToRedy(it.first, it.second) } as ArrayList<Item>
+    }
+          suspend fun getItemsApi(): ArrayList<Item> {
                val l = RetrofitInstsnse.API_SERVICES.getItemsToday()
                val t = RetrofitInstsnse.API_SERVICES.getItemsTomorrow()
               val r = l.zip(t)
-               return r.map { mapToRedy(it.first, it.second) } as ArrayList<Item>
+               return r.map { mapToRedyApi(it.first, it.second) } as ArrayList<Item>
            }
 
-//    fun getItems(): ArrayList<Item> = RetrofitInstsnse.API_SERVICES.getItemsToday()
 
 }

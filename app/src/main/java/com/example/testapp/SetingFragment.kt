@@ -1,11 +1,11 @@
 package com.example.testapp
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +14,10 @@ import com.example.testapp.data.Item
 import com.example.testapp.databinding.SetingListBinding
 
 class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchIcon {
-    private val viewModel : ItemViewModel by activityViewModels()
+    private  val viewModel : ItemViewModel by viewModels {
+        ItemViewModelFactory((activity?.application as BaseApplication).repository)
+    }
+    //private val viewModel : ItemViewModel by activityViewModels()
     private var _binding : SetingListBinding? = null
     private val binding get() = _binding!!
     val adapter = SetingAdapter(this, this)
@@ -40,6 +43,25 @@ class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchI
 
     })
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        activity?.invalidateOptionsMenu()
+    }
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.settings).isVisible = false
+//        val menuItem: MenuItem = menu.findItem(R.id.done)
+//        menuItem.setOnMenuItemClickListener(menuItem ->
+//            viewModel.update(adapter.setingList)
+//        )
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.done){
+            viewModel.listOfItem.value?.let { viewModel.update(it) }
+        }
+        return super.onContextItemSelected(item)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,9 +81,7 @@ class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchI
         binding.setingrecyclerview.adapter = adapter
         binding.setingrecyclerview.layoutManager = LinearLayoutManager(requireContext())
         itemTouchHelper.attachToRecyclerView(binding.setingrecyclerview)
-        binding.button.setOnClickListener{
-            findNavController().navigate(R.id.action_setingFragment_to_listFragment)
-        }
+
     }
 
     override fun onStart() {
