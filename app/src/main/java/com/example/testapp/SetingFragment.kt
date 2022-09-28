@@ -14,10 +14,10 @@ import com.example.testapp.data.Item
 import com.example.testapp.databinding.SetingListBinding
 
 class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchIcon {
-    private  val viewModel : ItemViewModel by viewModels {
+    private  val viewModel : ItemViewModel by activityViewModels()
+    {
         ItemViewModelFactory((activity?.application as BaseApplication).repository)
     }
-    //private val viewModel : ItemViewModel by activityViewModels()
     private var _binding : SetingListBinding? = null
     private val binding get() = _binding!!
     val adapter = SetingAdapter(this, this)
@@ -50,15 +50,12 @@ class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchI
     }
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.settings).isVisible = false
-//        val menuItem: MenuItem = menu.findItem(R.id.done)
-//        menuItem.setOnMenuItemClickListener(menuItem ->
-//            viewModel.update(adapter.setingList)
-//        )
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.done){
-            viewModel.listOfItem.value?.let { viewModel.update(it) }
+            viewModel.update()
+
         }
         return super.onContextItemSelected(item)
     }

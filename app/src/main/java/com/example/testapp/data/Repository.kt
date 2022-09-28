@@ -3,13 +3,13 @@ package com.example.testapp.data
 import androidx.lifecycle.asLiveData
 
 
-class Repository(private val itemDao: ItemDao) {
+class Repository(val itemDao: ItemDao) {
 
     suspend fun update(list: ArrayList<Item>){
+        itemDao.deleteAll()
         for (item in list)
-        itemDao.update(item)
+        itemDao.insert(item)
     }
-
             fun mapToRedyApi(itemToday: ItemJson, itemTomorrow: ItemJson): Item {
                 return Item(
                     Cur_Abbreviation = itemToday.Cur_Abbreviation,
@@ -36,10 +36,11 @@ class Repository(private val itemDao: ItemDao) {
         )
     }
     suspend fun getRedyItems():ArrayList<Item>{
-            val d = itemDao.getItems().asLiveData().value
-            val l = getItemsApi()
-            val r = d?.zip(l)
-            return r?.map { mapToRedy(it.first, it.second) } as ArrayList<Item>
+        return itemDao.getItems().asLiveData().value as ArrayList<Item>
+//        val d = itemDao.getItems().asLiveData().value
+//            val l = getItemsApi()
+//            val r = d?.zip(l)
+//            return r?.map { mapToRedy(it.first, it.second) } as ArrayList<Item>
     }
           suspend fun getItemsApi(): ArrayList<Item> {
                val l = RetrofitInstsnse.API_SERVICES.getItemsToday()

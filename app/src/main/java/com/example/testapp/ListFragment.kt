@@ -11,7 +11,8 @@ import com.example.testapp.databinding.ListFragmentBinding
 
 
 class ListFragment:Fragment() {
-private  val viewModel : ItemViewModel by viewModels {
+private  val viewModel : ItemViewModel by activityViewModels()
+    {
     ItemViewModelFactory((activity?.application as BaseApplication).repository)
 }
     private var _binding : ListFragmentBinding? = null

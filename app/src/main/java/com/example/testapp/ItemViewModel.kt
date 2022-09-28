@@ -1,18 +1,16 @@
 package com.example.testapp
 
 import androidx.lifecycle.*
-import com.example.testapp.data.Item
-import com.example.testapp.data.Repository
+import com.example.testapp.data.*
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ItemViewModel(private val repository: Repository): ViewModel() {
+class ItemViewModel(val repository: Repository): ViewModel() {
 val i1 = Item("aaaa", 1, "dsj", 11.11, 11.22, 1, "sodh", true)
 val i2 = Item("bbbb", 2, "dsj", 22.11, 22.22, 1,"sodh", true)
 val i3 = Item("cccc", 3, "dsj", 33.11, 33.22, 1,"sodh", true)
     val l  = arrayListOf (i1, i2, i3)
-
 
     private var _listOfItem = MutableLiveData<ArrayList<Item>>()
     val listOfItem: LiveData<ArrayList<Item>>  = _listOfItem
@@ -22,7 +20,7 @@ val i3 = Item("cccc", 3, "dsj", 33.11, 33.22, 1,"sodh", true)
               _listOfItem.value = repository.getRedyItems()
           }
           catch (e: Exception){
-              _listOfItem.value = repository.getItemsApi()
+              _listOfItem.value = l
           }
         }
     }
@@ -42,10 +40,10 @@ val i3 = Item("cccc", 3, "dsj", 33.11, 33.22, 1,"sodh", true)
     fun muveItem(initial: Int, target: Int){
         Collections.swap(_listOfItem.value!!, initial, target)
     }
-
-    fun update(list: ArrayList<Item>){
-        viewModelScope.launch { repository.update(list) }
+    fun update(){
+        viewModelScope.launch { listOfItem.value?.let { repository.update(it) } }
     }
+
 }
 class ItemViewModelFactory(private val repository: Repository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
