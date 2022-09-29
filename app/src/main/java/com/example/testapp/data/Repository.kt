@@ -1,5 +1,7 @@
 package com.example.testapp.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 
 
@@ -35,8 +37,8 @@ class Repository(val itemDao: ItemDao) {
             Cur_ID = itemApi.Cur_ID
         )
     }
-    suspend fun getRedyItems():ArrayList<Item>{
-        return itemDao.getItems().asLiveData().value as ArrayList<Item>
+    fun getRedyItems(): ArrayList<Item> {
+        return itemDao.getItems() as ArrayList<Item>
 //        val d = itemDao.getItems().asLiveData().value
 //            val l = getItemsApi()
 //            val r = d?.zip(l)

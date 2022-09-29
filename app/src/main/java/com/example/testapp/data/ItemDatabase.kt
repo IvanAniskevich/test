@@ -20,36 +20,28 @@ abstract fun getItemDao(): ItemDao
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.getItemDao())
+                  var itemDao = database.getItemDao()
+                    itemDao.deleteAll()
+                    var word = Item("USD",
+                        1,
+                        "usd",
+                        1.11,
+                        2.22,
+                        1,
+                        "12.12.22",
+                        true)
+                    itemDao.insert(word)
+                    word = Item("EUR",
+                        1,
+                        "eur",
+                        1.11,
+                        2.22,
+                        1,
+                        "12.12.22",
+                        true)
+                    itemDao.insert(word)
                 }
             }
-        }
-
-        suspend fun populateDatabase(itemDao: ItemDao) {
-            // Delete all content here.
-            itemDao.deleteAll()
-
-            // Add sample words.
-            var word = Item("USD",
-                1,
-                "usd",
-                1.11,
-                2.22,
-                1,
-                "12.12.22",
-                true)
-            itemDao.insert(word)
-            word = Item("EUR",
-                1,
-                "eur",
-                1.11,
-                2.22,
-                1,
-                "12.12.22",
-                true)
-            itemDao.insert(word)
-
-            // TODO: Add your own words!
         }
     }
 

@@ -24,7 +24,6 @@ val i3 = Item("cccc", 3, "dsj", 33.11, 33.22, 1,"sodh", true)
           }
         }
     }
-
     init {
         getItems()
     }
