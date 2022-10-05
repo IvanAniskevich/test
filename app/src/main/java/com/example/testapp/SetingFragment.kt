@@ -1,11 +1,10 @@
 package com.example.testapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,17 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testapp.data.Item
 import com.example.testapp.databinding.SetingListBinding
 
-class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchIcon {
-    private  val viewModel : ItemViewModel by activityViewModels()
+class SetingFragment : Fragment(), SetingAdapter.Visibility, SetingAdapter.OnTouchIcon {
+    private val viewModel: ItemViewModel by activityViewModels()
     {
         ItemViewModelFactory((activity?.application as BaseApplication).repository)
     }
-    private var _binding : SetingListBinding? = null
+    private var _binding: SetingListBinding? = null
     private val binding get() = _binding!!
     val adapter = SetingAdapter(this, this)
-    val itemTouchHelper =  ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+    val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.DOWN or ItemTouchHelper.UP, 0
-    ){
+    ) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
@@ -39,8 +38,6 @@ class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchI
         }
 
         override fun isLongPressDragEnabled(): Boolean = false
-
-
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,37 +45,40 @@ class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchI
         setHasOptionsMenu(true)
         activity?.invalidateOptionsMenu()
     }
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.settings).isVisible = false
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.settings_menu, menu)
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.done){
-            viewModel.update()
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.done -> {
+                Log.d("lalala", "click on icon")
+                findNavController().navigate(R.id.action_setingFragment_to_listFragment)
+                viewModel.update()
+            }
         }
-        return super.onContextItemSelected(item)
+        return super.onOptionsItemSelected(item)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       _binding = SetingListBinding.inflate(inflater, container, false)
+        _binding = SetingListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.listOfItem.observe(this.viewLifecycleOwner, { list ->
             list.let { adapter.setList(list) }
         })
-
         binding.setingrecyclerview.adapter = adapter
         binding.setingrecyclerview.layoutManager = LinearLayoutManager(requireContext())
         itemTouchHelper.attachToRecyclerView(binding.setingrecyclerview)
-
     }
 
     override fun onStart() {
@@ -97,6 +97,4 @@ class SetingFragment: Fragment(),SetingAdapter.Visibility,SetingAdapter.OnTouchI
     override fun onTouch(viewHolder: SetingAdapter.SetingViewHolder) {
         itemTouchHelper.startDrag(viewHolder)
     }
-
-
 }

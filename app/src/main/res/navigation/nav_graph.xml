@@ -18,6 +18,8 @@
         android:label="settings">
         <action
             android:id="@+id/action_setingFragment_to_listFragment"
-            app:destination="@id/ListFragment" />
+            app:destination="@id/ListFragment"
+            app:popUpTo="@id/ListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

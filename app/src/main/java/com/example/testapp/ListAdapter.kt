@@ -3,19 +3,16 @@ package com.example.testapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet.VISIBLE
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testapp.data.Item
-import com.example.testapp.data.RedyItem
 import com.example.testapp.databinding.ListItemBinding
 
-class ListAdapter: RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
+class ListAdapter : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
 
     var listItems = ArrayList<Item>()
 
-    class ListViewHolder(view: View): RecyclerView.ViewHolder(view) {
-      val binding = ListItemBinding.bind(view)
-
+    class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val binding = ListItemBinding.bind(view)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -36,8 +33,8 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
 
     override fun getItemCount(): Int = listItems.size
 
-    fun setList(list: ArrayList<Item>){
-        listItems= list.filter { it.Visibility } as ArrayList<Item>
+    fun setList(list: ArrayList<Item>) {
+        listItems = list.filter { it.Visibility } as ArrayList<Item>
         notifyDataSetChanged()
     }
 }

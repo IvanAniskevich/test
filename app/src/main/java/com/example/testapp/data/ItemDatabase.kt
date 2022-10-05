@@ -8,9 +8,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database (entities = [Item::class], version = 1, exportSchema = false )
-abstract class ItemDatabase: RoomDatabase() {
-abstract fun getItemDao(): ItemDao
+@Database(entities = [Item::class], version = 1, exportSchema = false)
+abstract class ItemDatabase : RoomDatabase() {
+    abstract fun getItemDao(): ItemDao
 
     private class ItemDatabaseCallback(
         private val scope: CoroutineScope
@@ -20,39 +20,45 @@ abstract fun getItemDao(): ItemDao
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                  var itemDao = database.getItemDao()
+                    var itemDao = database.getItemDao()
                     itemDao.deleteAll()
-                    var word = Item("USD",
+                    var word = Item(
+                        "USD",
                         1,
                         "usd",
                         1.11,
                         2.22,
                         1,
                         "12.12.22",
-                        true)
+                        true
+                    )
                     itemDao.insert(word)
-                    word = Item("EUR",
+                    word = Item(
+                        "EUR",
                         1,
                         "eur",
                         1.11,
                         2.22,
                         1,
                         "12.12.22",
-                        true)
+                        true
+                    )
                     itemDao.insert(word)
                 }
             }
         }
     }
 
-    companion object{
+    companion object {
         @Volatile
-        private  var INSTANCE: ItemDatabase? = null
-        fun getDatabase(context: Context, scope: CoroutineScope): ItemDatabase{
-            return INSTANCE ?: synchronized(this){
-                val instance = Room.databaseBuilder(context.applicationContext,
+        private var INSTANCE: ItemDatabase? = null
+        fun getDatabase(context: Context, scope: CoroutineScope): ItemDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
                     ItemDatabase::class.java,
-                    "item_database")
+                    "item_database"
+                )
                     .fallbackToDestructiveMigration()
                     .addCallback(ItemDatabaseCallback(scope))
                     .build()

@@ -1,7 +1,5 @@
 package com.example.testapp.data
 
-import retrofit2.Call
-
 data class ItemJson(
     val Cur_Abbreviation: String,
     val Cur_ID: Int,
