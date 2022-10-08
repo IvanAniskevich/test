@@ -3,6 +3,8 @@ package com.example.testapp
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -44,6 +46,8 @@ class SetingFragment : Fragment(), SetingAdapter.Visibility, SetingAdapter.OnTou
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         activity?.invalidateOptionsMenu()
+//        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+//        toolbar?.findViewById<TextView>(R.id.toolbar_title)?.text = activity?.actionBar?.title
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -54,7 +58,6 @@ class SetingFragment : Fragment(), SetingAdapter.Visibility, SetingAdapter.OnTou
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.done -> {
-                Log.d("lalala", "click on icon")
                 findNavController().navigate(R.id.action_setingFragment_to_listFragment)
                 viewModel.update()
             }
@@ -73,6 +76,8 @@ class SetingFragment : Fragment(), SetingAdapter.Visibility, SetingAdapter.OnTou
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.findViewById<TextView>(R.id.toolbar_title)?.text = "Настройка валют"
         viewModel.listOfItem.observe(this.viewLifecycleOwner, { list ->
             list.let { adapter.setList(list) }
         })

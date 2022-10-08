@@ -22,10 +22,10 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val item: Item = listItems[position]
-
+        val itemName ="${item.Cur_Scale} ${item.Cur_Name}"
         with(holder.binding) {
             abbreviation.text = item.Cur_Abbreviation
-            name.text = item.Cur_Name
+            name.text = itemName
             officialRateToday.text = item.Cur_OfficialRateToday.toString()
             textView3.text = item.Cur_OfficialRateTomorrow.toString()
         }

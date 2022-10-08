@@ -2,12 +2,13 @@ package com.example.testapp
 
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.databinding.ListFragmentBinding
-import java.util.zip.Inflater
 
 
 class ListFragment : Fragment() {
@@ -21,16 +22,19 @@ class ListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         activity?.invalidateOptionsMenu()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.list_menu, menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
            R.id.settings -> findNavController().navigate(R.id.action_listFragment_to_setingFragment)
+            R.id.home -> activity?.finish()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -47,10 +51,15 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.findViewById<TextView>(R.id.toolbar_title)?.text = "Курсы валют"
         viewModel.listOfItem.observe(this.viewLifecycleOwner, { list ->
             list.let { adapter.setList(list) }
         })
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.today.text =viewModel.getToday()
+        binding.tomorrow.text =viewModel.getTomorrow()
+
     }
 }

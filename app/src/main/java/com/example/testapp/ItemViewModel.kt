@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.testapp.data.Item
 import com.example.testapp.data.Repository
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ItemViewModel(val repository: Repository) : ViewModel() {
@@ -45,7 +46,18 @@ class ItemViewModel(val repository: Repository) : ViewModel() {
         viewModelScope.launch { _listOfItem.value?.let { repository.update(it) } }
         Log.d("lalala", "viewModel update item")
     }
-
+    fun getToday(): String{
+        val sdf = SimpleDateFormat("d.M.yy")
+        val today = repository.getToday()
+        return sdf.format(today)
+//       return repository.getToday()
+    }
+    fun getTomorrow(): String{
+        val sdf = SimpleDateFormat("d.M.yy")
+        val tomorrow = repository.getTomorrow()
+        return sdf.format(tomorrow)
+//        return repository.getTomorrow()
+    }
 }
 
 class ItemViewModelFactory(private val repository: Repository) : ViewModelProvider.Factory {
