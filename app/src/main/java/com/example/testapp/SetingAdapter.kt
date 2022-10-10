@@ -29,20 +29,21 @@ class SetingAdapter(val visibility: Visibility, val onTouchIcon: OnTouchIcon) :
             if (item.Visibility == true) {
                 switch1.isChecked = true
             } else switch1.isChecked = false
-//            switch1.setOnClickListener {
-//                if (switch1.isChecked) {
-//                    visibility.visibilityOn(item)
-//                } else {
-//                    visibility.visibilityOff(item)
-//                }
-//            }
-            switch1.setOnCheckedChangeListener { _, isChecked ->
-                if(isChecked){
+            switch1.setOnClickListener {
+                if (switch1.isChecked) {
                     visibility.visibilityOn(item)
-                }else{
+                } else {
                     visibility.visibilityOff(item)
                 }
             }
+
+//            switch1.setOnCheckedChangeListener { _, isChecked ->
+//                if(switch1.isChecked){
+//                    visibility.visibilityOn(item)
+//                }else{
+//                    visibility.visibilityOff(item)
+//                }
+//            }
             icon.setOnTouchListener { view, motionEvent ->
                 onTouchIcon.onTouch(holder)
                 true

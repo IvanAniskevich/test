@@ -1,6 +1,5 @@
 package com.example.testapp
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.testapp.data.Item
 import com.example.testapp.data.Repository
@@ -18,6 +17,7 @@ class ItemViewModel(val repository: Repository) : ViewModel() {
     val listOfItem: LiveData<ArrayList<Item>> = _listOfItem
     fun getItems() {
         viewModelScope.launch {
+//            _listOfItem.value = repository.getItemsApi()
             try {
                 _listOfItem.value = repository.getReadyItems()
             } catch (e: Exception) {
@@ -44,19 +44,16 @@ class ItemViewModel(val repository: Repository) : ViewModel() {
 
     fun update() {
         viewModelScope.launch { _listOfItem.value?.let { repository.update(it) } }
-        Log.d("lalala", "viewModel update item")
     }
-    fun getToday(): String{
+    fun getFirstDate(): String{
         val sdf = SimpleDateFormat("d.M.yy")
-        val today = repository.getToday()
+        val today = repository.firstDate
         return sdf.format(today)
-//       return repository.getToday()
     }
-    fun getTomorrow(): String{
+    fun getSecondDate(): String{
         val sdf = SimpleDateFormat("d.M.yy")
-        val tomorrow = repository.getTomorrow()
+        val tomorrow = repository.secondDate
         return sdf.format(tomorrow)
-//        return repository.getTomorrow()
     }
 }
 

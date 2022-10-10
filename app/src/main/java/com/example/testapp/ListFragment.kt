@@ -58,8 +58,8 @@ class ListFragment : Fragment() {
         })
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
-        binding.today.text =viewModel.getToday()
-        binding.tomorrow.text =viewModel.getTomorrow()
+        binding.today.text =viewModel.getFirstDate()
+        binding.tomorrow.text =viewModel.getSecondDate()
 
     }
 }
